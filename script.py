@@ -1,6 +1,12 @@
 import numpy as np
 from scipy.spatial import distance
 
+words = np.load('data/words.npy')
+vectors = np.load('data/vectors.npy')
+
+def get_words():
+    return words
+
 def gen_words():
     data = np.loadtxt('data/model.txt', usecols=0, dtype='str')
     np.save('data/words.npy', data)
@@ -15,8 +21,7 @@ def gen_vectors():
 
     np.save('data/vectors.npy', np.array(data))
 
-
-def get_words(words):
+def get_word_dict(words):
     word_dict = {}
 
     for i in range(0, len(words)):
@@ -29,18 +34,13 @@ def answer_index(vector, vectors):
         distance.cdist([vector], vectors)
     )[0][2:10]
 
+word_dict = get_word_dict(words)
 
-def main():
-    words = np.load('data/words.npy')
-    vectors = np.load('data/vectors.npy')
-    word_dict = get_words(words)
-
-    w1 = input("Word 1: ")
-    w2 = input("Word 2: ")
-    if (w1 in word_dict) and (w2 in word_dict):
-        vec_sum = vectors[word_dict[w2]] + vectors[word_dict[w1]]
-        indexes = answer_index(vec_sum, vectors)
-        for i in range(0, len(indexes)):
-            print(str(i) + ": " + str(words[indexes[i]]))
-
-main()
+def add(w1, w2):
+    vec_sum = vectors[w2] + vectors[w1]
+    indexes = answer_index(vec_sum, vectors)
+    res = []
+    for i in range(0, len(indexes)):
+        res.append(words[indexes[i]])
+    
+    return res

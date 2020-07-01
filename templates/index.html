@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <title>WordBot</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            form {
+                font-family: sans-serif;
+                max-width: 500px;
+                margin: auto;
+                padding: 20px;
+            }
+            .container {
+                font-size: 20px;
+                padding: 20px;
+                background-color: #eee;
+                border: 2px solid black;
+                border-bottom: none;
+                border-top-right-radius: 50px;
+                border-top-left-radius: 50px;
+            }
+            .word {
+                height: 30px;
+                font-size: 20px;
+            }
+            span {
+                vertical-align: middle;
+            }
+            #submit {
+                border-bottom-right-radius: 50px;
+                border-bottom-left-radius: 50px;
+                font-size: 25px;
+                font-weight: bold;
+                width: 100%;
+                background-color: #4A9D9A;
+                color: white;
+                border: 2px solid black;
+                border-top: none;
+                padding: 20px;
+            }
+            .bubble {
+                box-shadow: 2px 2px 20px grey;
+                background-color: white;
+                padding: 30px;
+                margin-bottom: 30px;
+                border: 3px solid #4A9D9A;
+            }
+            .bubble-left {
+                border-bottom-left-radius: 0px;
+                border-bottom-right-radius: 70px;
+                border-top-left-radius: 70px;
+                border-top-right-radius: 70px;
+            }
+            .bubble-right {
+                border-bottom-left-radius: 70px;
+                border-bottom-right-radius: 0px;
+                border-top-left-radius: 70px;
+                border-top-right-radius: 70px;
+                border-color: #5B79B5;
+            }
+            .ui-autocomplete {
+                height: 200px;
+                overflow-y: scroll;
+            }
+            #ans-container {
+                display: none
+            }
+        </style>
+        <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <script>
+            $(function() {
+               var words = {{ data.words|tojson }};
+               console.log(Object.keys(words).slice(1, 10))
+               $( ".word" ).autocomplete({
+                    source: Object.keys(words),
+                    minLength: 3,
+                    delay: 500
+               });
+
+               $('#submit').click((function(e) {
+                    e.preventDefault();
+                    var w1 = $('#w1').val();
+                    var w2 = $('#w2').val();
+                    $('#w1-ans').html(w1);
+                    $('#w2-ans').html(w2);
+
+                    w1 = words[w1];
+                    w2 = words[w2];
+                    if (w1 != undefined && w2 != undefined) {
+                        var data = {
+                            'w1' : w1,
+                            'w2' : w2
+                        };
+                        $.ajax({
+                            type: 'GET',
+                            url: window.location.href,
+                            data: data,
+                            success: function(data) {
+                                $('#ans-container').show()
+                                $('#ans').empty()
+                                for (word of data) {
+                                    $('#ans').append("<li>" + word + "</li>")
+                                }
+                            }
+                        });
+                    }
+                }))
+            });
+        </script>
+    </head>
+    <body>
+        <form>
+            <div class="container">
+                <div class="bubble bubble-left">
+                    Hey <span style="color:#5B79B5">WordBot</span>!
+                </div>
+                <div class="bubble bubble-right" align="right">
+                    <img src="{{url_for('static', filename='bot.png')}}" height="35" style="float:left"/>Hi there! I understand the semantic meaning of words. Ask me a question. 
+                </div>
+                <div class="bubble bubble-left">
+                    <span>What is</span>
+                    <input class="word" id="w1" type="text" />
+                    <span>+</span>
+                    <input class="word" id= "w2" type="text" />
+                    <span>?</span>
+                </div>
+                <div id="ans-container" class="bubble bubble-right" align="right">
+                    <img src="{{url_for('static', filename='bot.png')}}" height="35" style="float:left"/>I think <b><u id="w1-ans"></u></b> + <b><u id="w2-ans"></u></b> equals:
+                    <ol id="ans">
+                        <li>a</li>
+                        <li>b</li>
+                    </ol>
+                </div>
+            </div>
+            <input id="submit" type="submit" value="Calculate" />
+        </form>
+    </body>
+</html>
