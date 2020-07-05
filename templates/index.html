@@ -5,7 +5,7 @@
         <style>
             form {
                 font-family: sans-serif;
-                max-width: 500px;
+                max-width: 600px;
                 margin: auto;
                 padding: 20px;
             }
@@ -21,11 +21,13 @@
             .word {
                 height: 30px;
                 font-size: 20px;
+                width: 150px;
             }
             span {
                 vertical-align: middle;
             }
             #submit {
+                outline: none;
                 border-bottom-right-radius: 50px;
                 border-bottom-left-radius: 50px;
                 font-size: 25px;
@@ -38,6 +40,7 @@
                 padding: 20px;
             }
             .bubble {
+                width: fit-content;
                 box-shadow: 2px 2px 20px grey;
                 background-color: white;
                 padding: 30px;
@@ -64,13 +67,16 @@
             #ans-container {
                 display: none
             }
+            img {
+                padding: 0 10px;
+            }
         </style>
         <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
         <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
         <script>
             $(function() {
                var words = {{ data.words|tojson }};
-               console.log(Object.keys(words).slice(1, 10))
+               console.log(Object.keys(words).slice(1, 100))
                $( ".word" ).autocomplete({
                     source: Object.keys(words),
                     minLength: 3,
@@ -124,12 +130,14 @@
                     <input class="word" id= "w2" type="text" />
                     <span>?</span>
                 </div>
-                <div id="ans-container" class="bubble bubble-right" align="right">
-                    <img src="{{url_for('static', filename='bot.png')}}" height="35" style="float:left"/>I think <b><u id="w1-ans"></u></b> + <b><u id="w2-ans"></u></b> equals:
-                    <ol id="ans">
-                        <li>a</li>
-                        <li>b</li>
-                    </ol>
+                <div align="right">
+                    <div id="ans-container" class="bubble bubble-right">
+                        <img src="{{url_for('static', filename='bot.png')}}" height="35" style="float:left"/>I think <b><u id="w1-ans"></u></b> + <b><u id="w2-ans"></u></b> equals:
+                        <ol id="ans">
+                            <li>a</li>
+                            <li>b</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
             <input id="submit" type="submit" value="Calculate" />

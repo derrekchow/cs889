@@ -1,5 +1,5 @@
 from flask import Flask, url_for, render_template, request, jsonify
-from script import word_dict, add
+from script_v1 import word_dict, add
 
 app = Flask(__name__)
 
