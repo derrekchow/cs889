@@ -76,7 +76,6 @@
         <script>
             $(function() {
                var words = {{ data.words|tojson }};
-               console.log(Object.keys(words).slice(1, 100))
                $( ".word" ).autocomplete({
                     source: Object.keys(words),
                     minLength: 3,
@@ -109,7 +108,10 @@
                                 }
                             }
                         });
-                    }
+                    }else{
+                        $('#ans-container').show()
+                        $('#ans').empty()
+                        $('#ans').append("Sorry, I don't understand your inputs. Please check if they are valid.")                   }
                 }))
             });
         </script>
