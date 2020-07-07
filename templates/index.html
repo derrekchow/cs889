@@ -84,13 +84,19 @@
 
                $('#submit').click((function(e) {
                     e.preventDefault();
-                    var w1 = $('#w1').val();
-                    var w2 = $('#w2').val();
+                    var w1_tmp = $('#w1').val().split('_');
+                    var w2_tmp = $('#w2').val().split('_');
+
+                    var w1 = w1_tmp[0].toLowerCase() + '_' + w1_tmp[1].toUpperCase();
+                    var w2 = w2_tmp[0].toLowerCase() + '_' + w2_tmp[1].toUpperCase();
+
+
                     $('#w1-ans').html(w1);
                     $('#w2-ans').html(w2);
 
                     w1 = words[w1];
                     w2 = words[w2];
+
                     if (w1 != undefined && w2 != undefined) {
                         var data = {
                             'w1' : w1,
