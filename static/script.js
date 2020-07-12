@@ -46,7 +46,7 @@ $(function () {
             }
         }
     });
-    $('#submit').click((function(e) {
+    $('#submit').click(function(e) {
         e.preventDefault();
         if (w1 != null && w2 != null) {
             var data = {
@@ -68,5 +68,10 @@ $(function () {
                 }
             });
         }
-    }))
-});
+        else{
+            $('#ans-container').show()
+            $('#ans').empty()
+            $('#ans').append("Sorry, I don't understand your inputs. Please check if they are valid.")    
+        }
+    });
+})

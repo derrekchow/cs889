@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial import distance
+import re
 
 if __name__ != "__main__":
     words = np.load('data/words.npy')
@@ -35,6 +36,18 @@ def is_valid_word(word): # format: word = [<NAME>, <TYPE>]
 #     np.save('data/words.npy', np.array(words))
 
 
+def is_cleaned_data(word_name):
+    # the character '-' in valid word appears at most once
+    count_minus_sign = 0
+    for char in word_name:
+        if not char.isalpha() and char != '-':
+            return False
+        if char == '-':
+            count_minus_sign += 1
+
+    return (count_minus_sign == 0 or count_minus_sign == 1)
+
+
 def generate_giga(): # giga has underscores
     validate_words = {}
     for word in np.loadtxt('data/glove_model.txt', usecols=0, dtype='str'):
@@ -52,7 +65,7 @@ def generate_giga(): # giga has underscores
         word = row[:1][0].lower()
         w = word.split('_')
 
-        if (w[0] in validate_words and is_valid_word(w)):
+        if (w[0] in validate_words and is_valid_word(w) and is_cleaned_data(w[0])):
             words.append(word)
             vectors.append(vector)
 
