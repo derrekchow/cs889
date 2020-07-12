@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.spatial import distance
-import re
+from datetime import datetime
 
 if __name__ != "__main__":
     words = np.load('data/words.npy')
@@ -94,9 +94,19 @@ def add(w1, w2):
     indexes = answer_index(vec_sum)
     res = []
     for i in range(0, len(indexes)):
-        res.append(words[indexes[i]])
+        res.append(words[indexes[i]].split('_')[0])
+
+    log(words[w1], words[w2], res)
     
     return res
+
+
+def log(w1, w2, ans):
+    f=open("log.tsv", "a+")
+    f.write(
+        str(datetime.now()) + '\t' + w1.split('_')[0] + '\t' + w1.split('_')[1] + '\t' + w2.split('_')[0] + '\t' + w2.split('_')[1] + '\t' + '\t'.join(ans) + '\n'
+    )
+    f.close()
 
 
 if __name__ == "__main__":

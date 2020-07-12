@@ -154,3 +154,6 @@ img {
 .autocompleter-closed {
     display: none;
 }
+li {
+    margin-bottom: 8px;
+}
