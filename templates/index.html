@@ -1,117 +1,24 @@
 <html>
     <head>
         <title>WordBot</title>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <style>
-            form {
-                font-family: sans-serif;
-                max-width: 600px;
-                margin: auto;
-                padding: 20px;
-            }
-            .container {
-                font-size: 20px;
-                padding: 20px;
-                background-color: #eee;
-                border: 2px solid black;
-                border-bottom: none;
-                border-top-right-radius: 50px;
-                border-top-left-radius: 50px;
-            }
-            .word {
-                height: 30px;
-                font-size: 20px;
-                width: 150px;
-            }
-            span {
-                vertical-align: middle;
-            }
-            #submit {
-                outline: none;
-                border-bottom-right-radius: 50px;
-                border-bottom-left-radius: 50px;
-                font-size: 25px;
-                font-weight: bold;
-                width: 100%;
-                background-color: #4A9D9A;
-                color: white;
-                border: 2px solid black;
-                border-top: none;
-                padding: 20px;
-            }
-            .bubble {
-                width: fit-content;
-                box-shadow: 2px 2px 20px grey;
-                background-color: white;
-                padding: 30px;
-                margin-bottom: 30px;
-                border: 3px solid #4A9D9A;
-            }
-            .bubble-left {
-                border-bottom-left-radius: 0px;
-                border-bottom-right-radius: 70px;
-                border-top-left-radius: 70px;
-                border-top-right-radius: 70px;
-            }
-            .bubble-right {
-                border-bottom-left-radius: 70px;
-                border-bottom-right-radius: 0px;
-                border-top-left-radius: 70px;
-                border-top-right-radius: 70px;
-                border-color: #5B79B5;
-            }
-            .ui-autocomplete {
-                height: 200px;
-                overflow-y: scroll;
-            }
-            #ans-container {
-                display: none
-            }
-            img {
-                padding: 0 10px;
-            }
-        </style>
-        <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+
         <script>
-            $(function() {
-               var words = {{ data.words|tojson }};
-               console.log(Object.keys(words).slice(1, 100))
-               $( ".word" ).autocomplete({
-                    source: Object.keys(words),
-                    minLength: 3,
-                    delay: 500
-               });
+            // $(function() {
+            //     $('#w1').autocompleter({
+            //         source: colors,
+            //         //hint: true,
+            //         empty: false,
+            //         // customLabel: "word",
+            //         // customValue: "code",
+            //         //highlightMatches: true,
+            //         template: '{{ label }} <span>({{ hex }})</span>',
+            //     })
 
-               $('#submit').click((function(e) {
-                    e.preventDefault();
-                    var w1 = $('#w1').val();
-                    var w2 = $('#w2').val();
-                    $('#w1-ans').html(w1);
-                    $('#w2-ans').html(w2);
+            //     console.log(data.slice(1, 100))
+            // //     $("#w1").easyAutocomplete(options);
+            // //     $("#w2").easyAutocomplete(options);
 
-                    w1 = words[w1];
-                    w2 = words[w2];
-                    if (w1 != undefined && w2 != undefined) {
-                        var data = {
-                            'w1' : w1,
-                            'w2' : w2
-                        };
-                        $.ajax({
-                            type: 'GET',
-                            url: window.location.href,
-                            data: data,
-                            success: function(data) {
-                                $('#ans-container').show()
-                                $('#ans').empty()
-                                for (word of data) {
-                                    $('#ans').append("<li>" + word + "</li>")
-                                }
-                            }
-                        });
-                    }
-                }))
-            });
         </script>
     </head>
     <body>
@@ -123,12 +30,14 @@
                 <div class="bubble bubble-right" align="right">
                     <img src="{{url_for('static', filename='bot.png')}}" height="35" style="float:left"/>Hi there! I understand the semantic meaning of words. Ask me a question. 
                 </div>
-                <div class="bubble bubble-left">
+                <div class="bubble bubble-left formula">
                     <span>What is</span>
-                    <input class="word" id="w1" type="text" />
-                    <span>+</span>
-                    <input class="word" id= "w2" type="text" />
-                    <span>?</span>
+                    <span class="input">
+                        <input id="w1" class="word" type="text" contenteditable="true" />
+                        <span class="letter">+</span>
+                        <input id="w2" class="word" type="text" contenteditable="true"/>
+                        <span class="letter">?</span>
+                    </span>
                 </div>
                 <div align="right">
                     <div id="ans-container" class="bubble bubble-right">
@@ -142,5 +51,11 @@
             </div>
             <input id="submit" type="submit" value="Calculate" />
         </form>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="{{url_for('static', filename='autocompleter.js')}}"></script>
+        <script>
+            var data = {{data|tojson}}
+        </script>
+        <script src="{{url_for('static', filename='script.js')}}"></script>
     </body>
 </html>

@@ -21,20 +21,20 @@ def gen_vectors():
 
     np.save('data/vectors.npy', np.array(data))
 
-def get_word_dict(words):
-    word_dict = {}
+def get_words_list(words):
+    words = []
 
     for i in range(0, len(words)):
-        word_dict[words[i]] = i
+        words.append({"name": words[i], "code": i})
 
-    return word_dict
+    return words
 
 def answer_index(vector, vectors):
     return np.argsort(
         distance.cdist([vector], vectors)
     )[0][2:10]
 
-word_dict = get_word_dict(words)
+words_list = get_words_list(words)
 
 def add(w1, w2):
     vec_sum = vectors[w2] + vectors[w1]
