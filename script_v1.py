@@ -86,15 +86,21 @@ def get_words_list():
 def answer_index(vector):
     return np.argsort(
         distance.cdist([vector], vectors)
-    )[0][2:7]
+    )[0][2:20]
 
 
 def add(w1, w2):
     vec_sum = vectors[w2] + vectors[w1]
     indexes = answer_index(vec_sum)
     res = []
+    word1, word2 = words[w1].split('_')[0], words[w2].split('_')[0]
     for i in range(0, len(indexes)):
-        res.append(words[indexes[i]].split('_')[0])
+        tmp_word = words[indexes[i]].split('_')[0]
+        if len(res) == 5:
+            break
+        if tmp_word == word1 or tmp_word == word2:
+            continue
+        res.append(tmp_word)
 
     log(words[w1], words[w2], res)
     
